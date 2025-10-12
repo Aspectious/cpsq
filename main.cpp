@@ -7,32 +7,45 @@
 
 #pragma region codeistoleonline
 
-static const char* vertex_shader_source = R"glsl(
-float vertices[] = {
-  -0.5f, -0.5f, 0.0f,
-   0.5f, -0.5f, 0.0f,
-   0.0f,  0.5f, 0.0f
-};
+static const char* vertex_shader_1 = R"glsl(
+#version 330 core
+layout (location = 0) in vec3 aPos;
 
-unsigned int VBO, VAO;
-glGenVertexArrays(1, &VAO);
-glGenBuffers(1, &VBO);
+void main() {
+  gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+}
+)glsl";
+static const char* vertex_shader_2 = R"glsl(
+#version 330 core
+out vec4 FragColor;
 
-glBindVertexArray(VAO);
-
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-glEnableVertexAttribArray(0);
-
-// Draw triangle
-glBindVertexArray(VAO);
-glDrawArrays(GL_TRIANGLES, 0, 3);
+void main() {
+  FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+}
 )glsl";
 
 #pragma endregion codeistoleonline
 
+unsigned int compileShader(const char* shaderpointer) {
+    // 2. Create a shader object
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    // 3. Attach the shader source
+    glShaderSource(vertexShader, 1, &shaderpointer, NULL);
+
+    // 4. Compile the shader
+    glCompileShader(vertexShader);
+
+    // 5. Check for compilation errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    return vertexShader;
+}
 
 int main() {
 
@@ -54,33 +67,22 @@ int main() {
 
 #pragma region othercodeistole
 
+    gladLoadGL();
+
+    // 1. Define your shader source code
+    const char* vertexShaderSource = R"glsl(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+}
+)glsl";
 
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    //glViewport(0, 0, width, height);
+    unsigned int prog1 = compileShader(vertex_shader_1);
+    unsigned int prog2 = compileShader(vertex_shader_2);
 
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertexShader);
-
-    // 2. Check for compilation errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "poo";
-    }
-
-    // 3. Create a shader program and attach the shader
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-
-    // 4. (Later you'll also attach a fragment shader here)
-
-    // 5. Link the program
-    glLinkProgram(shaderProgram);
 
     // 6. Use the shader program in your render loop
     ;
@@ -92,7 +94,30 @@ int main() {
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
 
-        glUseProgram(shaderProgram);
+        glUseProgram(prog1);
+        glUseProgram(prog2);
+
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+          };
+
+        unsigned int VBO, VAO;
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Draw triangle
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window); // Swaps front and back buffers?
         glfwPollEvents(); // Polls events for things like keyboard/mouse input
