@@ -54,6 +54,20 @@ namespace cpd {
         }
     }
 
+    std::vector<unsigned char> intToBytes(int value) {
+        std::vector<unsigned char> bytes;
+        // Iterate through the bytes of the integer
+        // Assuming a 32-bit int, this will extract 4 bytes.
+        // Adjust loop for different int sizes or desired byte count.
+        for (int i = 0; i < sizeof(int); ++i) {
+            // Extract each byte using bitwise AND and right shift
+            bytes.push_back(static_cast<unsigned char>((value >> (i * 8)) & 0xFF));
+        }
+        // Reverse the order of bytes if you want big-endian representation
+        // (most significant byte first). By default, this creates little-endian.
+        std::reverse(bytes.begin(), bytes.end());
+        return bytes;
+    }
     class uDFLib {
     private:
         std::map<std::string, unsigned char[]> entries;
@@ -166,7 +180,14 @@ namespace cpd {
                     bytebuffer.push_back(0x12);
                     bytebuffer.push_back(0x14);
                     std::vector<unsigned char> filebytes = readBytesFromTargetFile(externalpath);
-                    bytebuffer.push_back(static_cast<uint8_t>(filebytes.size()));
+
+                    std::vector<unsigned char> lengthbytes = intToBytes(filebytes.size());
+                    for (unsigned char byte : lengthbytes) {
+                        bytebuffer.push_back(byte);
+                    }
+                    lengthbytes.clear();
+                    lengthbytes.shrink_to_fit();
+
                     bytebuffer.push_back(0x14);
                     for (uint8_t val : filebytes) {
                         bytebuffer.push_back(static_cast<uint8_t>(val));

@@ -1,0 +1,3 @@
+"./map.txt","/map.txt"
+"./shaders/f_debugshape.glsl","/shader/f_debugshape.glsl"
+"./shaders/v_debugshape.glsl","/shaders/v_debugshape.glsl"

@@ -49,7 +49,7 @@ namespace render {
         }
         return fragShader;
     }
-    static char* loadShaderFromFile() {
+    static char* loadShaderFromFile(std::string path) {
 
     }
     int create() {
