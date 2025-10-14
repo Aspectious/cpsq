@@ -1,0 +1,4 @@
+"./map.txt","/map.txt"
+"./shader/blank.glsl","/shader/blank.glsl"
+"./image/gaben.png","/testdir/newell.png"
+"./image/Digital_video_resolutions_(VCD_to_4K).svg","/image/bigfile.svg"
