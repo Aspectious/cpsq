@@ -1,3 +1,5 @@
 "./map.txt","/map.txt"
-"./shaders/f_debugshape.glsl","/shader/f_debugshape.glsl"
-"./shaders/v_debugshape.glsl","/shaders/v_debugshape.glsl"
+"./shaders\f_debugshape.glsl","/shaders/f_debugshape.glsl"
+"./shaders\v_debugshape.glsl","/shaders/v_debugshape.glsl"
+"./textures\textureless.png","/textures/textureless.png"
+"./textures\textureless.xcf","/textures/textureless.xcf"

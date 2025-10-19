@@ -4,6 +4,7 @@
 
 #ifndef CPDT_CLI_H
 #define CPDT_CLI_H
+#define VERSION_CPDT "1.4"
 
 int main(int argc, char* argv[]);
 

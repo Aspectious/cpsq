@@ -13,7 +13,6 @@ namespace cpd {
         std::string path;
         int offsetaddress;
         int length;
-        uDFHeaderEntry() = default;
         uDFHeaderEntry(std::string path, int offsetAddress, int length) {
             this->path = path;
             this->offsetaddress = offsetAddress;

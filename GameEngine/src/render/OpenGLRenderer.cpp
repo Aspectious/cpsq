@@ -5,9 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+#include <cpdl.h>
 #include "cpsq.h"
 
-namespace render {
+namespace cpsq::render {
     static unsigned int compileShader(const char *shaderpointer) {
         // 2. Create a shader object
         unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -49,7 +50,22 @@ namespace render {
         }
         return fragShader;
     }
-    static char* loadShaderFromFile(std::string path) {
+    static std::string loadShaderFromFile(std::string path) {
+        try {
+            std::string dbpath = "./packages/cpkg1.cpdf";
+
+            cpd::uDFLib shaders_cpdf = cpd::dfLoad(dbpath);
+            std::shared_ptr<cpd::uDFStream> ptr = shaders_cpdf.fetchEntry(path);
+            std::string text;
+            std::string line;
+            while (getline(ptr->get(), line)) {
+                text += line;
+            }
+            return text;
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            throw e;
+        }
 
     }
     int create() {
@@ -70,9 +86,11 @@ namespace render {
         // Load OpenGL Methods with Glad
         gladLoadGL();
 
-        char* vertex_shader_1 = loadShaderFromFile("assets/shaders/v_debugshape.glsl");
-        char* fragment_shader_1 = loadShaderFromFile("assets/shaders/f_debugshape.glsl")
-
+        try {
+            std::string vshader = loadShaderFromFile("/shaders/v_debugshape.glsl");
+            std::string fshader = loadShaderFromFile("/shaders/f_debugshape.glsl");
+            char* vertex_shader_1 = vshader.data();
+            char* fragment_shader_1 = fshader.data();
         unsigned int prog1 = compileShader(vertex_shader_1);
         unsigned int prog2 = compileFShader(fragment_shader_1);
 
@@ -177,5 +195,8 @@ namespace render {
         glfwTerminate();
 
         return 0;
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
 }

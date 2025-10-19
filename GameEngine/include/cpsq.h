@@ -6,9 +6,7 @@
 #define CPSQ_RENDER_H
 namespace cpsq {
     int main();
-    namespace render {
-        int create();
-    }
+
 }
 
 #endif //CPSQ_RENDER_H
