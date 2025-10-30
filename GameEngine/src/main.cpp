@@ -1,5 +1,5 @@
 #include "cpsq.h"
-#include "render/cpsq.render.h"
+#include "render/opengl.h"
 
 namespace cpsq {
      int main() {

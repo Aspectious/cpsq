@@ -26,10 +26,12 @@ set_target_properties(glad PROPERTIES
 
 # Create Program
 set(MY_SOURCES
-        src/render/OpenGLRenderer.cpp
+        src/render/opengl.renderer.cpp
         src/main.cpp
         include/cpsq.h
-        src/render/cpsq.render.h
+        src/render/opengl.h
+        src/render/cpsq.render.opengl.h/cpsq.render.opengl.h
+        src/render/opengl.renderer.cpp
 )
 
 add_executable(cpsq ${MY_SOURCES})

@@ -8,7 +8,7 @@
 #include <cpdl.h>
 #include "cpsq.h"
 
-namespace cpsq::render {
+namespace cpsq::render::opengl {
     static unsigned int compileShader(const char *shaderpointer) {
         // 2. Create a shader object
         unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);

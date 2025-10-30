@@ -13,6 +13,7 @@ namespace cpd {
         std::string path;
         int offsetaddress;
         int length;
+        uDFHeaderEntry() = default;
         uDFHeaderEntry(std::string path, int offsetAddress, int length) {
             this->path = path;
             this->offsetaddress = offsetAddress;
@@ -21,7 +22,7 @@ namespace cpd {
     };
 
     class uDFStreamBuf : public std::streambuf {
-        public:
+    public:
         uDFStreamBuf(unsigned char* data, std::size_t size) {
             char *begin = reinterpret_cast<char* >(data);
             setg(begin, begin, begin + size);

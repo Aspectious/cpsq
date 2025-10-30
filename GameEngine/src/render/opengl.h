@@ -7,7 +7,9 @@
 
 namespace cpsq {
     namespace render {
-        int create();
+        namespace opengl {
+            int create();
+        }
     }
 }
 
